@@ -1,0 +1,10 @@
+{
+    "helper": {
+        "host": "http://localhost:8888",
+        "endpoint": "/image"
+    },
+
+    "port": 7777,
+    "eventsUrl": "/events",
+    "sampleImageUrl": "???"
+}
