@@ -1,5 +1,5 @@
 var http = require('http');
-var request = require('request');
+var r = require('request');
 
 var config = require('./config.json');
 
@@ -12,14 +12,14 @@ var userUrl;
 http.createServer(function(request, response) {
     if (!isEvent(request)) return;
 
-    request.post({
+    r.post({
         url: doneUrl
     }, function(error, response, body) {
         if (error !== null) {
             throw error;
         }
 
-        request.post({
+        r.post({
             url: doneUrl,
             form: {
                 authUrl: userUrl
@@ -42,7 +42,7 @@ var isEvent = function(request) {
 
 
 var helperUrl = config.helper.host + config.helper.endpoint;
-request.post({
+r.post({
     url: helperUrl,
     form: {
         media: config.sampleImageUrl,
