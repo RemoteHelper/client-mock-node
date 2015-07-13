@@ -44,10 +44,14 @@ var isEvent = function(request) {
 var helperUrl = config.helper.host + config.helper.endpoint;
 r.post({
     url: helperUrl,
-    form: {
-        media: config.sampleImageUrl,
-        eventsUrl: config.eventsUrl
-    }
+    body: {
+        media: {
+            type: "url",
+            content: config.sampleImageUrl
+        },
+        eventsURL: config.eventsUrl
+    },
+    json: true
 }, function(error, response, body) {
     if (error !== null) {
         throw error;
