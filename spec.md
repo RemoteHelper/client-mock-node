@@ -7,10 +7,13 @@ We send the Server the url of our media, and the hook where we wish to receive t
     - Type: `POST`
     - Content:
 
-    ```json
+    ```javascript
     {
-            media: url | bytes,
-            eventsURL: url
+            "media": {
+                "type": url | raw,
+                "content": any
+              },
+            "eventsURL": url
     }
     ```
 
@@ -20,10 +23,10 @@ The server responds with the unique URL served to the user, and a specific route
     - Status: `200`
     - Body:
 
-        ```json
+        ```javascript
         {
-            userURL: url,
-            doneURL: url,
+            "userURL": url,
+            "doneURL": url,
         }
         ```
 
@@ -34,10 +37,10 @@ The server responds with the unique URL served to the user, and a specific route
     - Type: `POST`
     - Body:
 
-    ```json
+    ```javascript
     {
-        type: String
-        content: {}
+        "type": String
+        "content": {}
     }
     ```
 
@@ -51,9 +54,9 @@ The server responds with the unique URL served to the user, and a specific route
     -  Type: `POST`
     -  Body:
 
-    ```json
+    ```javascript
     {
-        authURL: userUrl
+        "authURL": userUrl
     }
     ```
 
