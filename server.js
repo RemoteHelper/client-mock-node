@@ -57,7 +57,6 @@ r.post({
         throw error;
     }
 
-    var bodyInJson = JSON.parse(body);
-    doneUrl = bodyInJson.doneUrl;
-    userUrl = bodyInJson.userUrl;
+    doneUrl = body.doneUrl;
+    userUrl = body.userUrl;
 });
