@@ -1,10 +1,10 @@
 {
     "helper": {
-        "host": "http://localhost:8888",
-        "endpoint": "/image"
+        "host": "http://localhost:8080",
+        "endpoint": "/api/help/image"
     },
 
     "port": 7777,
     "eventsUrl": "/events",
-    "sampleImageUrl": "???"
+    "sampleImageUrl": "http://example.org"
 }
