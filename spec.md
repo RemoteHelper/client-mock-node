@@ -12,7 +12,7 @@ We send the Server the url of our media, and the hook where we wish to receive t
             "media": {
                 "type": url | raw,
                 "content": any
-              },
+            },
             "eventsURL": url
     }
     ```
@@ -26,7 +26,7 @@ The server responds with the unique URL served to the user, and a specific route
         ```javascript
         {
             "userURL": url,
-            "doneURL": url,
+            "doneURL": url
         }
         ```
 
@@ -39,8 +39,9 @@ The server responds with the unique URL served to the user, and a specific route
 
     ```javascript
     {
-        "type": String
-        "content": {}
+        "type": String,
+        "content": {},
+        "timestamp": Integer
     }
     ```
 
