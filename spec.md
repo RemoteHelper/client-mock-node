@@ -1,6 +1,7 @@
 ## Requesting Remote Help
 
-We send the Server the url of our media, and the hook where we wish to receive the events.
+We send the Server the url of our media,
+and the hook where we wish to receive the events.
 
 - Request:
     - URL: `server/help/image`
@@ -17,7 +18,10 @@ We send the Server the url of our media, and the hook where we wish to receive t
     }
     ```
 
-The server responds with the unique URL served to the user, and a specific route where the server is listening for
+The server responds with the unique URL served to the user,
+and a specific 'done' route where the server is listening,
+waiting for us to hit him in that route
+to signal that the helping job is done.
 
 - Response:
     - Status: `200`
