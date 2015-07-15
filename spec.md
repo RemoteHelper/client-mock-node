@@ -13,7 +13,7 @@ and the hook where we wish to receive the events.
             "media": {
                 "type": url | raw,
                 "content": any
-              },
+            },
             "eventsURL": url
     }
     ```
@@ -30,7 +30,7 @@ to signal that the helping job is done.
         ```javascript
         {
             "userURL": url,
-            "doneURL": url,
+            "doneURL": url
         }
         ```
 
@@ -43,8 +43,9 @@ to signal that the helping job is done.
 
     ```javascript
     {
-        "type": String
-        "content": {}
+        "type": String,
+        "content": {},
+        "timestamp": Integer
     }
     ```
 
