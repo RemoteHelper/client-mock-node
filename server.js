@@ -4,49 +4,50 @@ var r = require('request');
 var config = require('./config.json');
 
 
-var doneUrl;
-var userUrl;
+var doneURL;
+var userURL;
 
 
 
 http.createServer(function(request, response) {
     if (!isEvent(request)) return;
 
+    console.log('received event!');
+
+    // Tell the server that we are done
     r.post({
-        url: doneUrl
+        url: doneURL,
+        body: {
+            authURL: userURL
+        },
+        json: true
     }, function(error, response, body) {
         if (error !== null) {
             throw error;
         }
 
-        r.post({
-            url: doneUrl,
-            form: {
-                authUrl: userUrl
-            }
-        }, function(error, response, body) {
-            if (error !== null) {
-                throw error;
-            }
-        });
+        console.log('help job stopped');
     });
+
+    response.end();
 }).listen(config.port);
 
 
 var isEvent = function(request) {
-    return request.url === config.eventsUrl && request.method === 'POST';
+    return request.url === config.eventsEndpoint && request.method === 'POST';
 };
 
 
 
 
-
-var helperUrl = config.helper.host + config.helper.endpoint;
+// Make help request to the server
+var helperURL = config.helper.host + config.helper.endpoint;
+var eventsURL = config.host + ':' + config.port + config.eventsEndpoint;
 r.post({
-    url: helperUrl,
+    url: helperURL,
     body: {
-        mediaURL: config.sampleImageUrl,
-        eventsURL: config.eventsUrl
+        mediaURL: config.sampleImageURL,
+        eventsURL: eventsURL
     },
     json: true
 }, function(error, response, body) {
@@ -54,6 +55,9 @@ r.post({
         throw error;
     }
 
-    doneUrl = body.doneUrl;
-    userUrl = body.userUrl;
+    doneURL = body.doneURL
+    userURL = body.userURL;
+
+    console.log('given doneURL', doneURL);
+    console.log('given static page:', userURL);
 });

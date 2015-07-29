@@ -4,7 +4,8 @@
         "endpoint": "/api/help/image"
     },
 
+    "host": "http://localhost",
     "port": 7777,
-    "eventsUrl": "/events",
-    "sampleImageUrl": "http://example.org"
+    "eventsEndpoint": "/events",
+    "sampleImageURL": "http://lorempixel.com/640/480/"
 }
