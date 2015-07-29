@@ -45,10 +45,7 @@ var helperUrl = config.helper.host + config.helper.endpoint;
 r.post({
     url: helperUrl,
     body: {
-        media: {
-            type: "url",
-            content: config.sampleImageUrl
-        },
+        mediaURL: config.sampleImageUrl,
         eventsURL: config.eventsUrl
     },
     json: true
