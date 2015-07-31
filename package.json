@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/RemoteHelper/dumb-client-mock#readme",
   "dependencies": {
+    "body": "^5.1.0",
     "request": "^2.58.0"
   }
 }
