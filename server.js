@@ -23,7 +23,9 @@ http.createServer(function(request, response) {
     totalNumberOfEvents++;
 
     if (totalNumberOfEvents >= MAX_NUMBER_OF_EVENTS_ALLOWED) {
-        endHelpJob();
+        response.end(function() {
+            endHelpJob();
+        });
         return;
     }
 
