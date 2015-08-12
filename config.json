@@ -1,11 +1,17 @@
 {
     "helper": {
-        "host": "http://localhost:8080",
-        "endpoint": "/api/help/image"
+        "protocol": "http",
+        "hostname": "localhost",
+        "port": 8080,
+        "pathname": "/api/help/image"
     },
 
-    "host": "http://localhost",
-    "port": 7777,
+    "self": {
+        "protocol": "http",
+        "hostname": "localhost",
+        "port": 7777
+    },
+
     "eventsEndpoint": "/events",
     "sampleImageURL": "http://lorempixel.com/640/480/"
 }

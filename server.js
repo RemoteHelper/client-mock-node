@@ -1,5 +1,7 @@
 "use strict";
 
+var path = require('path');
+var url  = require('url');
 var http = require('http');
 
 var r             = require('request');
@@ -88,24 +90,47 @@ var endHelpJob = function() {
 
 
 
-// Make initial help request to the server
-var helperURL = config.helper.host + config.helper.endpoint;
-var eventsURL = config.host + ':' + config.port + config.eventsEndpoint;
-r.post({
-    url: helperURL,
-    body: {
-        mediaURL: config.sampleImageURL,
-        eventsURL: eventsURL
-    },
-    json: true
-}, function(error, response, body) {
-    if (error !== null) {
-        throw error;
     }
 
-    doneURL = body.doneURL
-    userURL = body.userURL;
+http.createServer(
+    useCasesHandlers.limitedNumberOfEvents()
+).listen(config.self.port);
 
-    console.log('given doneURL', doneURL);
-    console.log('given static page:', userURL);
-});
+
+// Make initial help request to the server
+var helperURL = url.format(config.helper);
+
+var partsOfURLToSelf = config.self;
+
+var partsOfEventsURL = Object.create(partsOfURLToSelf);
+partsOfEventsURL.pathname = config.eventsEndpoint;
+var eventsURL = url.format(partsOfEventsURL);
+
+var sampleImageURL = config.sampleImageURL;
+
+
+
+
+var makeHelpRequest = function(givenMediaURL) {
+    r.post({
+        url: helperURL,
+        body: {
+            mediaURL: givenMediaURL,
+            eventsURL: eventsURL
+        },
+        json: true
+    }, function(error, response, body) {
+        if (error !== null) {
+            throw error;
+        }
+
+        doneURL = body.doneURL
+        userURL = body.userURL;
+
+        console.log('given doneURL', doneURL);
+        console.log('given static page:', userURL);
+    });
+};
+
+
+makeHelpRequest(sampleImageURL);
