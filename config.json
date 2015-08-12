@@ -13,5 +13,8 @@
     },
 
     "eventsEndpoint": "/events",
-    "sampleImageURL": "http://lorempixel.com/640/480/"
+
+    "gridImagesDirectory": "/images",
+
+    "sampleImageURL": "http://lorempixel.com/640/480/cats"
 }

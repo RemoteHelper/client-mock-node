@@ -6,6 +6,7 @@ var http = require('http');
 
 var r             = require('request');
 var parseJSONBody = require('body/json');
+var Router        = require('node-simple-router');
 
 var config = require('./config.json');
 
@@ -49,9 +50,28 @@ var useCasesHandlers = {
             });
         };
     },
+    recaptcha: function() {
+        var tile = require('./recaptcha/tile');
 
-
+        var handler = Router({
+            static_route: path.join(__dirname, config.gridImagesDirectory)
         });
+
+        handler.post(config.eventsEndpoint, function(request, response) {
+            var event = request.body;
+            console.log('received event:', event);
+
+            if (event.type !== 'mousedown') {
+                response.end();
+                return;
+            }
+
+            tile.click(event.content.coordinates);
+
+            sendUpdatedRecaptchaImage(tile.toImageIdentifier(), response);
+        });
+
+        return handler;
     }
 };
 
@@ -87,14 +107,28 @@ var endHelpJob = function() {
     });
 };
 
+var sendUpdatedRecaptchaImage = function(imageIdentifier, response) {
+    response.writeHead(200, { 'Content-Type': 'application/json'} )
+
+    var partsOfURLToImage = partsOfURLToSelf;
+    partsOfURLToImage.pathname = 'grid' + imageIdentifier + '.png';
+
+    response.end(JSON.stringify({
+        mediaURL: url.format(partsOfURLToImage)
+    }));
+};
 
 
 
-    }
+
+
+
 
 http.createServer(
-    useCasesHandlers.limitedNumberOfEvents()
+    useCasesHandlers.recaptcha()
 ).listen(config.self.port);
+
+
 
 
 // Make initial help request to the server
@@ -105,6 +139,10 @@ var partsOfURLToSelf = config.self;
 var partsOfEventsURL = Object.create(partsOfURLToSelf);
 partsOfEventsURL.pathname = config.eventsEndpoint;
 var eventsURL = url.format(partsOfEventsURL);
+
+var partsOfImageGridURL = Object.create(partsOfURLToSelf);
+partsOfImageGridURL.pathname = 'grid0.png';
+var imageGridURL = url.format(partsOfImageGridURL);
 
 var sampleImageURL = config.sampleImageURL;
 
@@ -133,4 +171,4 @@ var makeHelpRequest = function(givenMediaURL) {
 };
 
 
-makeHelpRequest(sampleImageURL);
+makeHelpRequest(imageGridURL);
