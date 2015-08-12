@@ -8,41 +8,54 @@ var parseJSONBody = require('body/json');
 var config = require('./config.json');
 
 
-
 var doneURL;
 var userURL;
 
-var MAX_NUMBER_OF_EVENTS_ALLOWED = 10;
-var totalNumberOfEvents = 0;
 
-http.createServer(function(request, response) {
-    if (!isEvent(request)) return;
+var useCasesHandlers = {
+    limitedNumberOfEvents: function() {
+        var MAX_NUMBER_OF_EVENTS_ALLOWED = 10;
+        var totalNumberOfEvents = 0;
 
-    console.log('received event!');
 
-    totalNumberOfEvents++;
+        return function handler(request, response) {
+            if (!isEvent(request)) return;
 
-    if (totalNumberOfEvents >= MAX_NUMBER_OF_EVENTS_ALLOWED) {
-        response.end(function() {
-            endHelpJob();
+            console.log('received event!');
+
+            totalNumberOfEvents++;
+
+            if (totalNumberOfEvents >= MAX_NUMBER_OF_EVENTS_ALLOWED) {
+                response.end(function() {
+                    endHelpJob();
+                });
+                return;
+            }
+
+            parseJSONBody(request, function(error, body) {
+                if (error !== null) {
+                    throw error;
+                }
+
+                var event = body;
+                console.log(event);
+                if (event.type === 'mouseup' && event.content.coordinates.x > event.content.coordinates.y) {
+                    sendNewMediaURL(response);
+                } else {
+                    response.end();
+                }
+            });
+        };
+    },
+
+
         });
-        return;
     }
+};
 
-    parseJSONBody(request, function(error, body) {
-        if (error !== null) {
-            throw error;
-        }
 
-        var event = body;
-        console.log(event);
-        if (event.type === 'mouseup' && event.content.coordinates.x > event.content.coordinates.y) {
-            sendNewMediaURL(response);
-        } else {
-            response.end();
-        }
-    });
-}).listen(config.port);
+
+
 
 
 var isEvent = function(request) {
