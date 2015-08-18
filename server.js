@@ -68,7 +68,7 @@ var useCasesHandlers = {
 
             if (isClickOnVerifyButton(event)) {
                 response.end(function() {
-                    endHelpJob();
+                    endHelpJob('Thank you! The reCAPTCHA has been successfully sent');
                 });
                 return;
             }
@@ -98,12 +98,18 @@ var sendNewMediaURL = function(response) {
     }));
 };
 
-var endHelpJob = function() {
+var endHelpJob = function(doneText) {
+    var body = {
+        authURL: userURL
+    };
+
+    if (doneText !== undefined) {
+        body.doneText = doneText;
+    }
+
     r.post({
         url: doneURL,
-        body: {
-            authURL: userURL
-        },
+        body: body,
         json: true
     }, function(error, response, body) {
         if (error !== null) {
