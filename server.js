@@ -66,6 +66,13 @@ var useCasesHandlers = {
                 return;
             }
 
+            if (isClickOnVerifyButton(event)) {
+                response.end(function() {
+                    endHelpJob();
+                });
+                return;
+            }
+
             tile.click(event.content.coordinates);
 
             sendUpdatedRecaptchaImage(tile.toImageIdentifier(), response);
@@ -85,7 +92,7 @@ var isEvent = function(request) {
 };
 
 var sendNewMediaURL = function(response) {
-    response.writeHead(200, { 'Content-Type': 'application/json'} )
+    response.writeHead(200, { 'Content-Type': 'application/json'});
     response.end(JSON.stringify({
         mediaURL: config.sampleImageURL
     }));
@@ -108,7 +115,7 @@ var endHelpJob = function() {
 };
 
 var sendUpdatedRecaptchaImage = function(imageIdentifier, response) {
-    response.writeHead(200, { 'Content-Type': 'application/json'} )
+    response.writeHead(200, { 'Content-Type': 'application/json'});
 
     var partsOfURLToImage = partsOfURLToSelf;
     partsOfURLToImage.pathname = 'grid' + imageIdentifier + '.png';
@@ -116,6 +123,34 @@ var sendUpdatedRecaptchaImage = function(imageIdentifier, response) {
     response.end(JSON.stringify({
         mediaURL: url.format(partsOfURLToImage)
     }));
+};
+
+var isClickOnVerifyButton = function(event) {
+    return isClickEvent(event) && isInVerifyButtonBoundingBox(event.content.coordinates);
+};
+
+var isClickEvent = function(event) {
+    return [ 'mouseup', 'mousedown' ].indexOf(event.type) !== -1;
+};
+
+var isInVerifyButtonBoundingBox = function(coordinates) {
+    return isInRange(coordinates.x, verifyButtonBoundingBox.x) &&
+        isInRange(coordinates.y, verifyButtonBoundingBox.y);
+};
+
+var verifyButtonBoundingBox = {
+    x: {
+        min: 164,
+        max: 164 + 97
+    },
+    y: {
+        min: 416,
+        max: 416 + 34
+    }
+};
+
+var isInRange = function(number, bound) {
+    return (number >= bound.min) && (number <= bound.max);
 };
 
 
